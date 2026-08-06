@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- Lethal Company v81 runs on Unity 2022.3 / Mono; BepInEx 5 plugins target netstandard2.1. -->
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AssemblyName>RandomDelivery</AssemblyName>
+    <RootNamespace>RandomDelivery</RootNamespace>
+    <Product>RandomDelivery</Product>
+    <Version>1.4.5</Version>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+
+    <!-- BepInEx.PluginInfoProps generates MyPluginInfo from these. -->
+    <BepInExPluginGuid>Timofey.RandomDelivery</BepInExPluginGuid>
+    <BepInExPluginName>RandomDelivery</BepInExPluginName>
+    <BepInExPluginVersion>1.4.5</BepInExPluginVersion>
+
+    <!-- Extra NuGet feed for BepInEx / game-lib packages. -->
+    <RestoreAdditionalProjectSources>https://api.nuget.org/v3/index.json;https://nuget.bepinex.dev/v3/index.json</RestoreAdditionalProjectSources>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- BepInEx 5 core + bundled HarmonyX (HarmonyLib). -->
+    <PackageReference Include="BepInEx.Core" Version="5.4.21" PrivateAssets="all" />
+    <PackageReference Include="BepInEx.PluginInfoProps" Version="2.1.0" PrivateAssets="all" />
+
+    <!-- Unity engine API surface (compile-time only). Matches Lethal Company v81 (Unity 2022.3.62). -->
+    <PackageReference Include="UnityEngine.Modules" Version="2022.3.62" IncludeAssets="compile" PrivateAssets="all" />
+
+    <!-- Stripped Lethal Company assemblies (Assembly-CSharp, Unity.Netcode, etc.) for v81.
+         Pinned to the exact v81 build so the project restores/builds offline from the NuGet cache. -->
+    <PackageReference Include="LethalCompany.GameLibs.Steam" Version="81.0.5-ngd.0" PrivateAssets="all" />
+  </ItemGroup>
+
+  <!-- Optional: copy the built DLL straight into the game's plugin folder.
+       Set the LC_PLUGINS env var to the BepInEx/plugins path to enable. -->
+  <Target Name="CopyToGame" AfterTargets="Build" Condition="'$(LC_PLUGINS)' != ''">
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(LC_PLUGINS)" />
+  </Target>
+
+</Project>

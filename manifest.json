@@ -1,0 +1,9 @@
+{
+  "name": "RandomDelivery",
+  "version_number": "1.4.5",
+  "website_url": "",
+  "description": "Air-drops 2-4 random shop items onto the ship's landing pad each day - some slots become live traps or monsters. Host-synced, JSON-configurable.",
+  "dependencies": [
+    "BepInEx-BepInExPack-5.4.2100"
+  ]
+}
