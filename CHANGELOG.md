@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.5.1
+- A Cruiser is never delivered when the players already have one (spawned, ordered, in the dropship, or
+  being delivered) — in that case the delivery falls back to a normal random one instead.
+
+## 1.5.0
+- New `ChanceForVehicle` (in `[Replacements]`): a delivery can bring a free Cruiser via the dropship
+  instead of the item batch. Rolled first; because the dropship carries a vehicle OR items, once a Cruiser
+  arrives the rest of that day's deliveries are cancelled.
+- Deliveries now work on the Company moon (71-Gordion): its day is too short to reach a morning clock
+  time, so there the delivery is dispatched right after landing, every visit. Traps and monsters can be
+  delivered there too, through the normal path.
+
 ## 1.4.5
 - Removed the mine auto-detonation feature entirely (`MinesAutoDetonate` / `MineWarningTime` config and all
   related code, including the grabbable-landmine compat). Landmines are now delivered as plain live traps

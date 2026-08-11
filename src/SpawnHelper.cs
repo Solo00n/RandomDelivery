@@ -208,6 +208,60 @@ namespace RandomDelivery
             _landShipMethod ??= typeof(ItemDropship).GetMethod("LandShipOnServer",
                 BindingFlags.NonPublic | BindingFlags.Instance);
 
+        // Vanilla ItemDropship.DeliverVehicleOnServer() is private; we invoke it to drop a free Cruiser.
+        private static MethodInfo _deliverVehicleMethod;
+        private static MethodInfo DeliverVehicleMethod =>
+            _deliverVehicleMethod ??= typeof(ItemDropship).GetMethod("DeliverVehicleOnServer",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+
+        /// <summary>
+        /// Delivers a free Cruiser (vehicle) via the item dropship — exactly like a vehicle order, minus the
+        /// credit charge (which lives in the terminal buy RPC, which we bypass). Returns false if there is no
+        /// terminal/dropship, no buyable vehicle, or the dropship is already busy with another delivery.
+        /// </summary>
+        internal static bool DeliverVehicle()
+        {
+            var terminal = ItemListProvider.GetTerminal();
+            if (terminal == null || terminal.buyableVehicles == null || terminal.buyableVehicles.Length == 0)
+                return false;
+
+            var dropship = UnityEngine.Object.FindObjectOfType<ItemDropship>();
+            if (dropship == null || DeliverVehicleMethod == null) return false;
+            if (dropship.deliveringOrder || dropship.shipLanded) return false; // busy
+
+            // Never deliver a second vehicle. If the players already have a Cruiser (spawned, ordered, sitting
+            // in the dropship, or one being delivered right now), bail so the caller does a normal item
+            // delivery instead of a car.
+            if (UnityEngine.Object.FindObjectOfType<VehicleController>() != null
+                || terminal.orderedVehicleFromTerminal != -1
+                || terminal.vehicleInDropship
+                || dropship.deliveringVehicle)
+            {
+                if (Plugin.Cfg.EnableLogging)
+                    Plugin.Log.LogInfo("[Delivery] A vehicle already exists — skipping the Cruiser, doing a normal delivery.");
+                return false;
+            }
+
+            int idx = Rng.Next(terminal.buyableVehicles.Length);
+            terminal.orderedVehicleFromTerminal = idx; // free — the credit charge is only in the buy RPC
+            terminal.vehicleInDropship = true;
+            try
+            {
+                DeliverVehicleMethod.Invoke(dropship, null); // spawns the vehicle + plays the drop animation
+            }
+            catch (Exception e)
+            {
+                Plugin.Log.LogWarning($"[Delivery] Vehicle delivery failed: {e.Message}");
+                terminal.orderedVehicleFromTerminal = -1;
+                terminal.vehicleInDropship = false;
+                return false;
+            }
+
+            if (Plugin.Cfg.EnableLogging)
+                Plugin.Log.LogInfo("[Delivery] Delivered a free Cruiser via the dropship.");
+            return true;
+        }
+
         /// <summary>
         /// Sends a delivery on the game's real item dropship. The items are added to
         /// <c>Terminal.orderedItemsFromTerminal</c> — exactly what a paid order does, minus the credit

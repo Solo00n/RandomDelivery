@@ -68,6 +68,7 @@ namespace RandomDelivery
             if (cfg == null || !cfg.Enabled) return;
             if (!DeliveryManager.IsHost) return;                 // only the host delivers
             if (_deliveredToday >= cfg.MaxDeliveriesPerDay) return;
+            if (DeliveryManager.StopDeliveriesForDay) return;    // a Cruiser was delivered — done for today
 
             float dayTime = TimeOfDay.Instance != null ? TimeOfDay.Instance.currentDayTime : _landedElapsed;
 
@@ -96,6 +97,16 @@ namespace RandomDelivery
             }
         }
 
+        /// <summary>True on the Company moon (71-Gordion). Matches the check MonstersGordion uses.</summary>
+        private static bool IsCompanyMoon()
+        {
+            var level = StartOfRound.Instance != null ? StartOfRound.Instance.currentLevel : null;
+            if (level == null) return false;
+            return level.sceneName == "CompanyBuilding"
+                || level.levelID == 3
+                || (level.PlanetName != null && level.PlanetName.Contains("Gordion"));
+        }
+
         /// <summary>Re-reads config and rebuilds the trigger set for a freshly started day.</summary>
         private void OnDayStart()
         {
@@ -120,6 +131,15 @@ namespace RandomDelivery
         {
             _triggers.Clear();
             var cfg = Plugin.Cfg;
+
+            // On the Company moon (Gordion) the day is very short and never reaches a morning clock time, so
+            // a delivery would never fire there. Deliver right after landing instead, every visit.
+            if (IsCompanyMoon())
+            {
+                _triggers.Add(new Trigger { Kind = TriggerKind.StartOfDay, Label = "Gordion (on landing)" });
+                return;
+            }
+
             if (cfg.DeliveryTimes == null) return;
 
             int numberOfHours = TimeOfDay.Instance != null && TimeOfDay.Instance.numberOfHours > 0

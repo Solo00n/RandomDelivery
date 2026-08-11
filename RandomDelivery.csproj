@@ -6,7 +6,7 @@
     <AssemblyName>RandomDelivery</AssemblyName>
     <RootNamespace>RandomDelivery</RootNamespace>
     <Product>RandomDelivery</Product>
-    <Version>1.4.5</Version>
+    <Version>1.5.1</Version>
     <LangVersion>latest</LangVersion>
     <Nullable>disable</Nullable>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -15,7 +15,7 @@
     <!-- BepInEx.PluginInfoProps generates MyPluginInfo from these. -->
     <BepInExPluginGuid>Timofey.RandomDelivery</BepInExPluginGuid>
     <BepInExPluginName>RandomDelivery</BepInExPluginName>
-    <BepInExPluginVersion>1.4.5</BepInExPluginVersion>
+    <BepInExPluginVersion>1.5.1</BepInExPluginVersion>
 
     <!-- Extra NuGet feed for BepInEx / game-lib packages. -->
     <RestoreAdditionalProjectSources>https://api.nuget.org/v3/index.json;https://nuget.bepinex.dev/v3/index.json</RestoreAdditionalProjectSources>

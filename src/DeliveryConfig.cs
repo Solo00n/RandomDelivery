@@ -41,6 +41,7 @@ namespace RandomDelivery
         private readonly ConfigEntry<string> _priority;
         private readonly ConfigEntry<float> _chanceForAllTraps;
         private readonly ConfigEntry<float> _chanceForAllMonsters;
+        private readonly ConfigEntry<float> _chanceForVehicle;
 
         // ---- Traps ----
         private readonly ConfigEntry<string> _allowedTraps;
@@ -108,6 +109,12 @@ namespace RandomDelivery
                 new ConfigDescription("Chance (0-100) that the WHOLE delivery is nothing but monsters (every " +
                     "slot). Rolled once per delivery. If both all-traps and all-monsters hit, Priority decides.",
                     new AcceptableValueRange<float>(0f, 100f)));
+            _chanceForVehicle = cfg.Bind("Replacements", "ChanceForVehicle", 0f,
+                new ConfigDescription("Chance (0-100) that a delivery brings a free Cruiser (vehicle) instead " +
+                    "of the item batch. Rolled first, before everything else. Because the dropship can only " +
+                    "carry a vehicle OR items, once a Cruiser is delivered the rest of that day's deliveries " +
+                    "are cancelled.",
+                    new AcceptableValueRange<float>(0f, 100f)));
 
             // ================= Traps =================
             _allowedTraps = cfg.Bind("Traps", "AllowedTraps", "Turret, Landmine",
@@ -149,6 +156,7 @@ namespace RandomDelivery
         public float ChanceForMonster => Clamp01to100(_chanceForMonster.Value);
         public float ChanceForAllTraps => Clamp01to100(_chanceForAllTraps.Value);
         public float ChanceForAllMonsters => Clamp01to100(_chanceForAllMonsters.Value);
+        public float ChanceForVehicle => Clamp01to100(_chanceForVehicle.Value);
 
         public List<string> AllowedTraps => SplitCsv(_allowedTraps.Value);
         public List<string> BlockedTraps => SplitCsv(_blockedTraps.Value);

@@ -23,10 +23,17 @@ namespace RandomDelivery
 
         private enum Cat { Item, Trap, Monster }
 
-        /// <summary>Called at the start of every new day to drop any per-day caches.</summary>
+        /// <summary>
+        /// True once a Cruiser has been delivered this day — the dropship is then committed to the vehicle,
+        /// so the scheduler cancels any remaining deliveries until the next day.
+        /// </summary>
+        internal static bool StopDeliveriesForDay { get; private set; }
+
+        /// <summary>Called at the start of every new day to drop any per-day caches / flags.</summary>
         internal static void OnNewDay()
         {
             ItemListProvider.Reset();
+            StopDeliveriesForDay = false;
         }
 
         /// <summary>True when we are the host/server (also true in singleplayer).</summary>
@@ -51,6 +58,15 @@ namespace RandomDelivery
 
             try
             {
+                // Rolled first: a delivery can bring a free Cruiser instead of the item batch. Because the
+                // dropship can only carry a vehicle OR items, a Cruiser cancels the rest of the day.
+                if (Rng.NextDouble() * 100.0 < cfg.ChanceForVehicle && SpawnHelper.DeliverVehicle())
+                {
+                    StopDeliveriesForDay = true;
+                    Plugin.Log.LogInfo($"[Delivery] ({reason}) delivered a Cruiser — remaining deliveries today cancelled.");
+                    return true;
+                }
+
                 var itemPool = ItemListProvider.BuildPool();
                 if (itemPool.Count == 0)
                 {

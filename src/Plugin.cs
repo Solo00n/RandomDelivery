@@ -24,7 +24,7 @@ namespace RandomDelivery
         // BepInEx/config/Timofey.RandomDelivery.cfg (which LethalConfig then edits in-game).
         public const string GUID = "Timofey.RandomDelivery";
         public const string NAME = "RandomDelivery";
-        public const string VERSION = "1.4.5";
+        public const string VERSION = "1.5.1";
 
         /// <summary>Singleton, used as the coroutine host for delayed spawns.</summary>
         public static Plugin Instance { get; private set; }

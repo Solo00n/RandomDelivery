@@ -4,7 +4,7 @@
 
 ![Lethal Company](https://img.shields.io/badge/Lethal%20Company-V81-cc0000?style=flat-square)
 ![BepInEx](https://img.shields.io/badge/BepInEx-5.4.21%2B-cc0000?style=flat-square)
-![Version](https://img.shields.io/badge/version-1.4.5-cc0000?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.5.1-cc0000?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-cc0000?style=flat-square)
 
 **Language / Язык:** [English](#english) · [Русский](#russian)
@@ -74,6 +74,7 @@ File: <code>BepInEx/config/Timofey.RandomDelivery.cfg</code> (created on first l
 <tr><td><code>ChanceForTrap</code> / <code>ChanceForMonster</code></td><td><code>15</code> / <code>10</code></td><td>Per-slot % chance a slot becomes a trap / a monster.</td></tr>
 <tr><td><code>Priority</code></td><td><code>Monster</code></td><td>Winner when both a trap and a monster hit the same slot.</td></tr>
 <tr><td><code>ChanceForAllTraps</code> / <code>ChanceForAllMonsters</code></td><td><code>0</code> / <code>0</code></td><td>Once-per-delivery chance the whole delivery is all traps / all monsters.</td></tr>
+<tr><td><code>ChanceForVehicle</code></td><td><code>0</code></td><td>Once-per-delivery chance the dropship brings a free Cruiser instead of items; once it does, the rest of the day's deliveries are cancelled.</td></tr>
 </table>
 
 <blockquote style="border-left: 4px solid #cc0000; padding-left: 15px;">
@@ -86,6 +87,7 @@ The allow/block lists — <code>AllowedItems/BlockedItems</code>, <code>AllowedT
 - In-game configuration via <strong style="color: #cc0000;">LethalConfig</strong> (auto-detected, optional — no hard dependency).
 - Uses the game's own dropship and vanilla networked spawns — no custom network objects, low conflict risk.
 - Works on vanilla and modded moons; if a moon has no dropship, the delivery falls back to spawning on the pad next to the ship.
+- Works on the Company moon (71-Gordion) too, where the delivery is dispatched right after landing (its day never reaches a morning clock time).
 
 ### <span style="color: #cc0000;">BUILD</span>
 
@@ -164,6 +166,7 @@ Output: <code>bin/Release/RandomDelivery.dll</code>. Game assemblies are referen
 <tr><td><code>ChanceForTrap</code> / <code>ChanceForMonster</code></td><td><code>15</code> / <code>10</code></td><td>Пошаговый шанс (%) сделать слот ловушкой / монстром.</td></tr>
 <tr><td><code>Priority</code></td><td><code>Monster</code></td><td>Кто побеждает, если в один слот выпали и ловушка, и монстр.</td></tr>
 <tr><td><code>ChanceForAllTraps</code> / <code>ChanceForAllMonsters</code></td><td><code>0</code> / <code>0</code></td><td>Шанс один раз за доставку, что вся партия — только ловушки / только монстры.</td></tr>
+<tr><td><code>ChanceForVehicle</code></td><td><code>0</code></td><td>Шанс один раз за доставку, что дропшип привезёт бесплатный Cruiser вместо предметов; после этого остальные доставки за день отменяются.</td></tr>
 </table>
 
 <blockquote style="border-left: 4px solid #cc0000; padding-left: 15px;">
@@ -176,6 +179,7 @@ Output: <code>bin/Release/RandomDelivery.dll</code>. Game assemblies are referen
 - Настройка в игре через <strong style="color: #cc0000;">LethalConfig</strong> (определяется автоматически, необязателен — жёсткой зависимости нет).
 - Использует дропшип самой игры и ванильные сетевые спавны — без своих сетевых объектов, низкий риск конфликтов.
 - Работает на ванильных и модовых лунах; если на луне нет дропшипа, доставка запасным путём спавнится на площадке у корабля.
+- Работает и на луне Компании (71-Gordion): там доставка отправляется сразу после посадки (её день не доходит до утреннего времени).
 
 ### <span style="color: #cc0000;">СБОРКА</span>
 

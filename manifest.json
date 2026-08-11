@@ -1,6 +1,6 @@
 {
   "name": "RandomDelivery",
-  "version_number": "1.4.5",
+  "version_number": "1.5.1",
   "website_url": "https://github.com/Solo00n/RandomDelivery",
   "description": "A dropship delivers 2-4 random free shop items to your ship each day - some arrive as live traps or hostile monsters instead. Host-synced, configurable, with in-game LethalConfig support.",
   "dependencies": [
