@@ -10,3 +10,6 @@ obj/
 
 # Local tooling
 .claude/
+
+# Thunderstore packages
+*.zip
